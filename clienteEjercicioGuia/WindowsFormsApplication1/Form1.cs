@@ -85,7 +85,7 @@ namespace WindowsFormsApplication1
                     MessageBox.Show("Tu nombre no es bonito. Lo siento.");
 
             }
-            else
+            else if (altura.Checked)
             {
                 // Enviamos nombre y altura
                 string mensaje = "3/" + nombre.Text + "/" + alturaBox.Text;
@@ -99,8 +99,49 @@ namespace WindowsFormsApplication1
                 mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
                 MessageBox.Show(mensaje);
             }
-             
-        
+            else if (palindromo.Checked)
+            {
+                string mensaje = "4/" + nombre.Text;
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+
+                MessageBox.Show(mensaje);
+            }
+            else if (mayusculas.Checked)
+            {
+                string mensaje = "5/" + nombre.Text;
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+
+                MessageBox.Show(mensaje);
+            }
+            else if (celciusfarenheit.Checked)
+            {
+                string mensaje = "6/" + celcius.Text;
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[80];
+                server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+
+                MessageBox.Show(mensaje);
+            }
+
         }
 
         private void button3_Click(object sender, EventArgs e)
