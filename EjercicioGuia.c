@@ -9,6 +9,8 @@
 #include <pthread.h> 
 
 int contador;
+int i;
+int sockets[100];
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -52,8 +54,6 @@ void *AtenderCliente (void *socket)
 		
 		if (codigo ==0) //petici?n de desconexi?n
 			terminar=1;
-		else if (codigo == 7)
-			sprintf (respuesta, "%d", contador);
 		else if (codigo ==1){
 			//piden la longitd del nombre
 			int x = strlen(nombre);
@@ -108,9 +108,15 @@ void *AtenderCliente (void *socket)
 			write (sock_conn,respuesta, strlen(respuesta));
 		}
 		if (codigo >= 1 && codigo <=6)
-			pthread_mutex_lock( &mutex );
+		{	pthread_mutex_lock( &mutex );
 			contador = contador + 1;
 			pthread_mutex_unlock ( &mutex );
+			char notificacion[20];
+			sprintf(notificacion, "%d", contador);
+			for (int j = 0; j<i; j++){
+				write (sockets[j],notificacion, strlen(notificacion));
+			}
+		}
 	}
 	// Se acabo el servicio para este cliente
 	close(sock_conn);
@@ -139,8 +145,7 @@ int main(int argc, char *argv[])
 		printf("Error en el Listen");
 	
 	contador = 0;
-	int i = 0;
-	int sockets[100];
+	i = 0;
 	pthread_t thread;
 	
 	// Bucle infinito
